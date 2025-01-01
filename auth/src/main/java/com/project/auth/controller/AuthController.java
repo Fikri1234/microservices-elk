@@ -26,14 +26,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -104,16 +102,20 @@ public class AuthController extends BaseController {
     public ResponseEntity<ObjectApiResponse> token(@RequestBody LoginRequest request) {
         ObjectMessageResponse msg = new ObjectMessageResponse();
         try {
-            Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(request.getRefreshToken()));
-            // check if present in db and not revoked, etc
+            if (tokenProvider.validateToken(request.getRefreshToken())) {
+                Authentication authentication = tokenProvider.getAuthentication(request.getRefreshToken());
+                // check if present in db and not revoked, etc
 
-            String refreshToken = tokenProvider.createAccessToken(authentication);
+                String refreshToken = tokenProvider.createAccessToken(authentication);
 
-            LoginResponse response = new LoginResponse();
-            response.setUsername(request.getUsername());
-            response.setAccessToken(refreshToken);
-            response.setExpiredAccessToken(tokenProvider.getRemainingExpiredFromToken(refreshToken));
-            return new ResponseEntity<>(responseApi(response), HttpStatus.OK);
+                LoginResponse response = new LoginResponse();
+                response.setUsername(tokenProvider.getUsername(request.getRefreshToken()));
+                response.setAccessToken(refreshToken);
+                response.setExpiredAccessToken(tokenProvider.getRemainingExpiredFromToken(refreshToken));
+                return new ResponseEntity<>(responseApi(response), HttpStatus.OK);
+            } else {
+                throw new AuthenticationExceptionHandler("Invalid refresh token");
+            }
         } catch (AuthenticationException e) {
             throw new AuthenticationExceptionHandler(e.getMessage(), e);
         } catch (Exception e) {
