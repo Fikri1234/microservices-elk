@@ -1,7 +1,6 @@
 package com.project.auth.exception;
 
 import com.project.commons.model.enums.MethodMessage;
-import com.project.commons.model.enums.StatusConstant;
 import com.project.commons.model.response.ObjectApiResponse;
 import com.project.commons.model.response.ObjectMessageResponse;
 import org.springframework.http.HttpStatus;

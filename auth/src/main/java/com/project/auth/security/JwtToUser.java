@@ -1,6 +1,6 @@
 package com.project.auth.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,15 +13,11 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
+@AllArgsConstructor
 public class JwtToUser implements Converter<Jwt, UsernamePasswordAuthenticationToken> {
 
 
     private UserDetailsService userDetailsService;
-
-    @Autowired
-    public JwtToUser(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 
     @Override
     public UsernamePasswordAuthenticationToken convert(Jwt source) {

@@ -3,7 +3,7 @@ package com.project.auth.service.impl;
 import com.project.auth.entity.BranchEntity;
 import com.project.auth.repository.BranchRepository;
 import com.project.auth.service.BranchService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +14,10 @@ import java.util.Optional;
  */
 
 @Service
+@AllArgsConstructor
 public class BranchServiceImpl implements BranchService {
 
     private BranchRepository branchRepository;
-
-    @Autowired
-    public BranchServiceImpl(BranchRepository branchRepository) {
-        this.branchRepository = branchRepository;
-    }
 
     @Override
     public Optional<BranchEntity> findById(Integer id) {

@@ -34,8 +34,12 @@ import java.util.Objects;
 @Slf4j
 public class RsaKeyConfiguration {
 
-    @Autowired
     Environment environment;
+
+    @Autowired
+    public RsaKeyConfiguration(Environment environment) {
+        this.environment = environment;
+    }
 
     @Value("${access-token.private-key}")
     private String accessTokenPrivateKeyPath;

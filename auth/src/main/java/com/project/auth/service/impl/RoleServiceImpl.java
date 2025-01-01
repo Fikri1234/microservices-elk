@@ -3,7 +3,7 @@ package com.project.auth.service.impl;
 import com.project.auth.entity.RoleEntity;
 import com.project.auth.repository.RoleRepository;
 import com.project.auth.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +14,10 @@ import java.util.Optional;
  */
 
 @Service
+@AllArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
     private RoleRepository roleRepository;
-
-    @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public Optional<RoleEntity> findById(Integer id) {

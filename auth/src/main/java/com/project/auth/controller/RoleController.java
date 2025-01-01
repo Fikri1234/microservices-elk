@@ -1,9 +1,7 @@
 package com.project.auth.controller;
 
 import com.project.auth.entity.RoleEntity;
-import com.project.auth.entity.UserEntity;
 import com.project.auth.model.response.RoleResponse;
-import com.project.auth.model.response.UserResponse;
 import com.project.auth.service.RoleService;
 import com.project.commons.controller.BaseController;
 import org.slf4j.Logger;
@@ -14,12 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by user on Jul, 2024
@@ -43,7 +39,7 @@ public class RoleController extends BaseController {
         List<RoleResponse> responses = new ArrayList<>();
         try {
             List<RoleEntity> entities = roleService.findAll();
-            responses = entities.stream().map(RoleResponse::new).collect(Collectors.toList());
+            responses = entities.stream().map(RoleResponse::new).toList();
         } catch (Exception e) {
             e.printStackTrace();
         }

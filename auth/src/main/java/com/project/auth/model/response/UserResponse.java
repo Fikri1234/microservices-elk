@@ -48,6 +48,6 @@ public class UserResponse extends EmbeddedResponse {
         this.failCounter = userEntity.getFailCounter();
         this.lastLogin = userEntity.getLastLogin();
         this.resetToken = userEntity.getResetToken();
-        this.authorities = userEntity.getAuthorities().stream().map(x -> new RoleResponse(x)).collect(Collectors.toSet());
+        this.authorities = userEntity.getAuthorities().stream().map(RoleResponse::new).collect(Collectors.toSet());
     }
 }

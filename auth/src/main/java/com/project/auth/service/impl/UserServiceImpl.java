@@ -3,7 +3,7 @@ package com.project.auth.service.impl;
 import com.project.auth.entity.UserEntity;
 import com.project.auth.repository.UserRepository;
 import com.project.auth.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,15 +14,11 @@ import java.util.Optional;
  */
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
 
     private UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Optional<UserEntity> findById(Long id) {

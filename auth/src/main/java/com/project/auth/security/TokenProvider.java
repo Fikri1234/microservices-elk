@@ -91,19 +91,17 @@ public class TokenProvider {
         long expiredSecond = Long.parseLong(jwtAccessTokenExp);
 
         Optional<ParamEntity> optIssuer = paramService.findByParamNameAndEmbeddedEntity_Active(ParamTypeConstant.ISSUER_JWT.name(), true);
-        if (optIssuer.isPresent()) {
-            jwtIssuer = optIssuer.get().getParamValue();
-        }
+        optIssuer.ifPresent(paramEntity -> jwtIssuer = paramEntity.getParamValue());
 
         if (isGenerateAccessToken) {
             Optional<ParamEntity> optAccess = paramService.findByParamNameAndEmbeddedEntity_Active(ParamTypeConstant.EXPIRES_JWT_ACCESS.name(), true);
             if (optAccess.isPresent() && StringUtils.hasText(optAccess.get().getParamValue())) {
-                expiredSecond = Long.valueOf(optAccess.get().getParamValue());
+                expiredSecond = Long.parseLong(optAccess.get().getParamValue());
             }
         } else {
             Optional<ParamEntity> optRefresh = paramService.findByParamNameAndEmbeddedEntity_Active(ParamTypeConstant.EXPIRES_JWT_REFRESH.name(), true);
             if (optRefresh.isPresent() && StringUtils.hasText(optRefresh.get().getParamValue())) {
-                expiredSecond = Long.valueOf(optRefresh.get().getParamValue());
+                expiredSecond = Long.parseLong(optRefresh.get().getParamValue());
             }
         }
 

@@ -5,7 +5,6 @@ import com.project.auth.model.response.LoginResponse;
 import com.project.auth.security.TokenProvider;
 import com.project.commons.controller.BaseController;
 import com.project.commons.exception.AuthenticationExceptionHandler;
-import com.project.commons.model.enums.MethodMessage;
 import com.project.commons.model.enums.StatusConstant;
 import com.project.commons.model.response.ObjectApiResponse;
 import com.project.commons.model.response.ObjectMessageResponse;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +62,7 @@ public class AuthController extends BaseController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ObjectApiResponse> login(@RequestBody LoginRequest userLogin) throws IllegalAccessException {
+    public ResponseEntity<ObjectApiResponse> login(@RequestBody LoginRequest userLogin) {
         Authentication authentication =
                 authenticationManager
                         .authenticate(new UsernamePasswordAuthenticationToken(
@@ -107,7 +105,6 @@ public class AuthController extends BaseController {
         ObjectMessageResponse msg = new ObjectMessageResponse();
         try {
             Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(request.getRefreshToken()));
-            Jwt jwt = (Jwt) authentication.getCredentials();
             // check if present in db and not revoked, etc
 
             String refreshToken = tokenProvider.createAccessToken(authentication);
@@ -128,8 +125,7 @@ public class AuthController extends BaseController {
     @PostMapping("/logout")
     public ResponseEntity<ObjectApiResponse> logout(HttpSession session, HttpServletRequest request,
                              HttpServletResponse response,
-                             @RegisteredOAuth2AuthorizedClient("messaging-client-oidc") OAuth2AuthorizedClient authorizedClient)
-            throws IOException {
+                             @RegisteredOAuth2AuthorizedClient("messaging-client-oidc") OAuth2AuthorizedClient authorizedClient) {
 
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
